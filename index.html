@@ -1,446 +1,344 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Winnie 的 ABC 字母學習樂園</title>
+    <title>可愛注音練習機 - 玩注音</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* 1. 視覺風格: 現代、乾淨、有質感, 帶點粉色的可愛感 */
-        :root {
-            --primary-pink: #FFC0CB; /* 主粉色 - 櫻花粉 */
-            --secondary-pink: #FF69B4; /* 次粉色 - 熱情粉 */
-            --light-pink: #FFF0F5; /* 淺背景色 - 薰衣草花瓣 */
-            --text-dark: #4B0082; /* 深紫色文字 */
-            --text-light: #FFFFFF;
-            --success-green: #6AA84F;
-            --error-red: #CC0000;
-            --font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background-color: var(--light-pink);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 0;
+	body {
+            font-family: '微軟正黑體', 'Arial', sans-serif;
+            background-color: #ffe4e1; /* 夢幻粉色背景 */
+            color: #5d4037;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             min-height: 100vh;
-        }
-        
-        /* 動作按鈕樣式 (再聽一次 & 切換大小寫) */
-        .action-button {
-            background-color: var(--secondary-pink);
-            color: var(--text-light);
-            border: none;
-            border-radius: 25px; /* 圓角膠囊形狀 */
-            padding: 10px 18px; /* 稍微增加水平間距 */
-            font-size: 1.1em; /* 稍微放大字體 */
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 10; 
+            margin: 0;
+            padding: 20px;
         }
 
-        .action-button:hover {
-            background-color: #FF1493; /* 更深的粉色 */
-            transform: translateY(-2px);
-        }
-
-        .action-button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* 標題區塊 */
-        header {
-            background-color: var(--primary-pink);
-            color: var(--text-light);
+        .container {
+            background-color: #fff0f5; /* 略淺的粉色容器 */
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.4); /* 粉色陰影 */
+            padding: 40px;
             width: 100%;
-            padding: 20px 0;
+            max-width: 600px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
         }
 
         h1 {
-            margin: 0;
+            color: #ff69b4; /* 亮粉紅色標題 */
             font-size: 2.5em;
-            letter-spacing: 3px;
-            text-shadow: 1px 1px 2px var(--secondary-pink);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px #fff;
         }
 
-        /* 主要內容區塊 */
-        main {
-            width: 90%;
-            max-width: 1200px;
-            padding: 20px;
-            background-color: var(--text-light);
+        .game-area {
+            border: 5px solid #ffb6c1; /* 淺粉色邊框 */
             border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        /* 2. 教育感: 字母展示區 */
-        #alphabet-display {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-            gap: 10px;
-            padding: 10px 0;
-            margin-top: 15px;
-        }
-
-        .letter-card {
-            background-color: var(--primary-pink);
-            color: var(--text-light);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .letter-card:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-            background-color: var(--secondary-pink);
-        }
-
-        .letter-card h2 {
-            margin: 0;
-            font-size: 2em;
-            line-height: 1;
-        }
-
-        /* 3. 有互動性: 答題區 */
-        #quiz-section {
-            text-align: center;
             padding: 20px;
-            background-color: var(--light-pink);
-            border-radius: 10px;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-            margin-top: 10px; /* 留出上方按鈕的空間 */
-        }
-        
-        #quiz-question {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--secondary-pink);
+            background-color: #fff;
         }
 
-        /* 調整選項容器，確保 6 個按鈕能平均排列 */
-        #options-container {
-            display: flex;
-            justify-content: center;
-            gap: 18px; /* 稍微增加間距 */
+        .question-box {
             margin-bottom: 20px;
-            flex-wrap: wrap; 
         }
 
-        .option-button {
-            background-color: var(--text-light);
-            color: var(--text-dark);
-            border: 3px solid var(--primary-pink);
+        #word-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: #e91e63; /* 櫻桃紅色字體 */
+            margin-bottom: 10px;
+            min-height: 50px; /* 確保沒有題目時也有空間 */
+        }
+
+        #listen-again {
+            background-color: #ffc0cb; /* 粉紅按鈕 */
+            color: #880e4f;
+            border: none;
+            padding: 10px 20px;
             border-radius: 10px;
-            padding: 8px 15px; 
-            font-size: 1.8em; 
-            font-weight: bold;
+            font-size: 1.1em;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            width: 75px; /* 稍微縮小寬度以容納 6 個 */
-            height: 75px; /* 稍微縮小高度 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            box-shadow: 0 4px #ff80a0;
         }
 
-        .option-button:hover {
-            background-color: #FFEEF4;
-            transform: scale(1.05);
-        }
-
-        .option-button:active {
-            transform: scale(0.98);
-        }
-
-        /* 答題結果反饋 */
-        #feedback {
-            font-size: 1.2em;
-            font-weight: bold;
-            height: 1.5em; 
-        }
-
-        .correct {
-            color: var(--success-green);
-        }
-
-        .incorrect {
-            color: var(--error-red);
-        }
-
-        /* 答題分數 */
-        #score-display {
-            margin-top: 15px;
-            font-size: 1.2em;
-            color: var(--text-dark);
+        #listen-again:hover {
+            background-color: #ff80a0;
         }
         
-        /* 讓切換按鈕獨立於測驗區塊上方 */
-        #case-toggle-container-top {
-            text-align: center;
-            margin-top: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed var(--primary-pink);
+        /* 輸入區塊 */
+        .input-area {
+            margin-bottom: 25px;
         }
 
-        .flex-header {
+        label {
             display: block;
-            margin-bottom: 5px;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #d81b60; /* 深粉色標籤 */
         }
-        .flex-header h2 {
-            margin-top: 0;
+
+        #zhuyin-input {
+            width: 80%;
+            padding: 12px;
+            font-size: 1.5em;
+            text-align: center;
+            border: 3px solid #f8bbd0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #880e4f;
+        }
+
+        /* 按鈕群組 */
+        .button-group {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap; /* 換行以適應小螢幕 */
+        }
+
+        .button-group button {
+            flex-grow: 1;
+            margin: 5px;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .button-group button:active {
+            transform: translateY(2px);
+            box-shadow: none !important;
+        }
+
+        .btn-check {
+            background-color: #90ee90; /* 淺綠色 (答題) */
+            color: #1b5e20;
+            box-shadow: 0 4px #66bb6a;
+        }
+
+        .btn-check:hover {
+            background-color: #66bb6a;
+        }
+
+        .btn-clear {
+            background-color: #add8e6; /* 淺藍色 (清除) */
+            color: #01579b;
+            box-shadow: 0 4px #4fc3f7;
+        }
+
+        .btn-clear:hover {
+            background-color: #4fc3f7;
+        }
+        
+        .btn-next {
+            background-color: #ffb6c1; /* 淺粉色 (下一題) */
+            color: #880e4f;
+            box-shadow: 0 4px #ff80a0;
+        }
+
+        .btn-next:hover {
+            background-color: #ff80a0;
+        }
+
+        /* 答題回饋區 */
+        #message {
+            margin-top: 15px;
+            font-size: 1.4em;
+            font-weight: bold;
+            min-height: 30px;
+            color: #ff69b4; /* 預設回饋顏色 */
         }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>🎀 Winnie 的字母學習樂園 🎀</h1>
-    </header>
-
-    <main>
-        
-        <div id="case-toggle-container-top">
-            <button id="case-toggle-button-quiz" class="action-button">Aa 切換小寫</button>
-        </div>
-
-        <div id="quiz-section">
-            <h2>❓ 字母猜猜看！</h2>
+    <div class="container">
+        <h1>🌟 可愛注音拼音練習 🌟</h1>
+        <div class="game-area">
+            <div class="question-box">
+                <p id="word-display">點擊開始練習</p>
+                <button id="listen-again" title="再聽一次"><i class="fas fa-volume-up"></i> 再聽一次</button>
+            </div>
             
-            <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px;">
-                <div id="quiz-question">準備好開始了嗎？</div>
-                <button id="repeat-button" class="action-button">🔊 再聽一次</button>
+            <div class="input-area">
+                <label for="zhuyin-input">請輸入注音拼音 (含聲調):</label>
+                <input type="text" id="zhuyin-input" placeholder="例如：ㄉㄚˋ" maxlength="5">
+                <div class="button-group">
+                    <button id="check-answer" class="btn-check"><i class="fas fa-check"></i> 送出答案</button>
+                    <button id="clear-input" class="btn-clear"><i class="fas fa-trash-alt"></i> 全部清除</button>
+                    <button id="next-word" class="btn-next"><i class="fas fa-arrow-right"></i> 下一題</button>
+                </div>
             </div>
-            <div id="options-container">
+            
+            <div class="feedback-area">
+                <p id="message">準備好了嗎？點擊「下一題」開始！</p>
             </div>
-
-            <div id="feedback"></div>
-            <div id="score-display">得分: 0 / 0</div>
         </div>
-
-        <hr style="border-top: 2px solid var(--primary-pink); margin-top: 30px; margin-bottom: 10px;">
-
-        <div class="flex-header">
-            <h2>點擊字母發音！</h2>
-        </div>
-        <div id="alphabet-display">
-        </div>
-        
-    </main>
+    </div>
 
     <script>
-        const ALPHABET_UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-        const ALPHABET_LOWER = 'abcdefghijklmnopqrstuvwxyz'.split('');
-        // 【修改點 2】：將選項數量設定為 6
-        const NUMBER_OF_OPTIONS = 6; 
-        
-        let currentAlphabet = ALPHABET_UPPER; 
-        const caseToggleButton = document.getElementById('case-toggle-button-quiz'); 
-        
-        const alphabetDisplay = document.getElementById('alphabet-display');
-        const optionsContainer = document.getElementById('options-container');
-        const quizQuestion = document.getElementById('quiz-question');
-        const feedback = document.getElementById('feedback');
-        const scoreDisplay = document.getElementById('score-display');
-        const repeatButton = document.getElementById('repeat-button');
-        
-        let currentQuestion = { answer: '', options: [] };
-        let currentAnswerLetter = ''; 
-        let score = 0;
-        let totalQuestions = 0;
+	// 題庫：國小或幼兒常見詞彙
+        // 格式：{ word: "詞彙", zhuyin: "注音拼音", pronunciation: "發音(給語音API用)" }
+        const questions = [
+            { word: "媽媽", zhuyin: "ㄇㄚㄇㄚ˙", pronunciation: "媽媽" },
+            { word: "爸爸", zhuyin: "ㄅㄚˋㄅㄚ˙", pronunciation: "爸爸" },
+            { word: "蘋果", zhuyin: "ㄆㄧㄥˊㄍㄨㄛˇ", pronunciation: "蘋果" },
+            { word: "香蕉", zhuyin: "ㄒㄧㄤㄐㄧㄠ", pronunciation: "香蕉" },
+            { word: "狗狗", zhuyin: "ㄍㄡˇㄍㄡ˙", pronunciation: "狗狗" },
+            { word: "貓咪", zhuyin: "ㄇㄠㄇㄧ", pronunciation: "貓咪" },
+            { word: "太陽", zhuyin: "ㄊㄞˋㄧㄤˊ", pronunciation: "太陽" },
+            { word: "月亮", zhuyin: "ㄩㄝˋㄌㄧㄤˋ", pronunciation: "月亮" },
+            { word: "開車", zhuyin: "ㄎㄞㄔㄜ", pronunciation: "開車" },
+            { word: "氣球", zhuyin: "ㄑㄧˋㄑㄧㄡˊ", pronunciation: "氣球" },
+            { word: "鉛筆", zhuyin: "ㄑㄧㄢㄅㄧˇ", pronunciation: "鉛筆" },
+            { word: "玩具", zhuyin: "ㄨㄢˊㄐㄩˋ", pronunciation: "玩具" },
+            { word: "吃飯", zhuyin: "ㄔㄈㄢˋ", pronunciation: "吃飯" },
+            { word: "睡覺", zhuyin: "ㄕㄨㄟˋㄐㄧㄠˋ", pronunciation: "睡覺" },
+            { word: "好棒", zhuyin: "ㄏㄠˇㄅㄤˋ", pronunciation: "好棒" },
+        ];
 
-        // ----------------------------------------------------
-        // 1. 字母發音功能
-        // ----------------------------------------------------
+        let currentQuestion = null;
+        let synthesizer = null; // 語音合成器物件
 
-        const isSpeechSupported = 'speechSynthesis' in window;
-        const synth = isSpeechSupported ? window.speechSynthesis : null;
-        
-        function speak(text) {
-            if (!isSpeechSupported) {
-                console.warn('您的瀏覽器不支持語音合成。');
+        // --- DOM 元素快取 ---
+        const wordDisplay = document.getElementById('word-display');
+        const zhuyinInput = document.getElementById('zhuyin-input');
+        const message = document.getElementById('message');
+        const listenAgainBtn = document.getElementById('listen-again');
+        const clearInputBtn = document.getElementById('clear-input');
+        const checkAnswerBtn = document.getElementById('check-answer');
+        const nextWordBtn = document.getElementById('next-word');
+
+        // --- 核心功能函數 ---
+
+        /** * 初始化語音合成器。
+         * 如果瀏覽器支援 SpeechSynthesis，則初始化。
+         */
+        function initSpeechSynthesizer() {
+            if ('speechSynthesis' in window) {
+                synthesizer = window.speechSynthesis;
+            } else {
+                message.textContent = "注意：您的瀏覽器不支援語音播放功能。";
+                listenAgainBtn.disabled = true;
+            }
+        }
+
+        /** * 播放當前詞彙的發音。
+         */
+        function speakWord(text) {
+            if (synthesizer && text) {
+                // 停止任何正在進行的語音
+                synthesizer.cancel();
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-TW'; // 設定語言為台灣中文
+                utterance.rate = 0.8; // 稍微慢一點，讓小朋友聽得更清楚
+                utterance.pitch = 1.2; // 稍微高一點，更像卡通或童聲
+                
+                synthesizer.speak(utterance);
+            }
+        }
+
+        /**
+         * 隨機選取下一題並顯示。
+         */
+        function nextQuestion() {
+            // 隨機選取一個題目
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            currentQuestion = questions[randomIndex];
+
+            // 1. 清空輸入框和回饋訊息
+            clearInput();
+            message.textContent = "請聽發音，然後輸入注音！";
+            message.style.color = '#ff69b4';
+
+            // 2. 顯示文字 (給小朋友知道是哪個詞)
+            wordDisplay.textContent = currentQuestion.word;
+
+            // 3. 播放發音
+            speakWord(currentQuestion.pronunciation);
+            
+            // 讓輸入框自動聚焦，方便小朋友直接輸入
+            zhuyinInput.focus();
+        }
+
+        /** * 檢查使用者輸入的注音是否正確。
+         */
+        function checkAnswer() {
+            if (!currentQuestion) {
+                message.textContent = "請點擊「下一題」開始練習！";
                 return;
             }
-            synth.cancel(); 
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US'; 
-            utterance.rate = 0.8; 
             
-            synth.speak(utterance);
-        }
+            const userInput = zhuyinInput.value.trim().toLowerCase();
+            const correctAnswer = currentQuestion.zhuyin.toLowerCase();
 
-        /**
-         * 重新渲染字母卡片，並根據當前狀態顯示大小寫
-         */
-        function renderAlphabet() {
-            alphabetDisplay.innerHTML = ''; 
-            currentAlphabet.forEach(letter => {
-                const card = document.createElement('div');
-                card.classList.add('letter-card');
-                card.innerHTML = `<h2>${letter}</h2>`;
-                card.onclick = () => {
-                    // 發音時，總是使用大寫字母進行語音識別
-                    speak(letter.toUpperCase()); 
-                };
-                alphabetDisplay.appendChild(card);
-            });
-        }
-
-        /**
-         * 切換大小寫並更新界面
-         */
-        function toggleCase() {
-            if (currentAlphabet === ALPHABET_UPPER) {
-                currentAlphabet = ALPHABET_LOWER;
-                caseToggleButton.textContent = 'Aa 切換大寫';
-            } else {
-                currentAlphabet = ALPHABET_UPPER;
-                caseToggleButton.textContent = 'Aa 切換小寫';
-            }
-            renderAlphabet(); // 重新渲染字母列表
-            generateQuiz(); // 開始新的測驗以更新選項大小寫
-        }
-
-        // ----------------------------------------------------
-        // 2. 互動答題功能
-        // ----------------------------------------------------
-
-        function getRandomElements(arr, num) {
-            const shuffled = [...arr].sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, num);
-        }
-
-        /**
-         * 生成一組新的測驗題目，答案與選項依據 currentAlphabet 狀態
-         */
-        function generateQuiz() {
-            // 隨機選一個「大寫」字母作為測驗基礎
-            const baseAnswer = getRandomElements(ALPHABET_UPPER, 1)[0]; 
-            
-            // 根據當前模式決定答案顯示
-            const answer = (currentAlphabet === ALPHABET_UPPER) ? baseAnswer : baseAnswer.toLowerCase();
-
-            currentAnswerLetter = answer;
-            
-            // 選取選項：從當前模式的字母集合中選取選項
-            const otherLetters = currentAlphabet.filter(l => l !== answer);
-            // 從其他字母中選取 NUMBER_OF_OPTIONS - 1 個錯誤選項
-            const wrongOptions = getRandomElements(otherLetters, NUMBER_OF_OPTIONS - 1); 
-            
-            // 組合所有選項，並隨機排序
-            const options = getRandomElements([answer, ...wrongOptions], NUMBER_OF_OPTIONS);
-
-            currentQuestion = { answer, options };
-            
-            quizQuestion.textContent = `請點擊妳聽到的字母！`;
-
-            optionsContainer.innerHTML = '';
-            options.forEach(option => {
-                const button = document.createElement('button');
-                button.classList.add('option-button');
-                button.textContent = option;
-                button.dataset.answer = option; 
-                button.onclick = handleAnswer;
-                optionsContainer.appendChild(button);
-                button.disabled = false;
-            });
-            
-            feedback.textContent = '';
-
-            if (repeatButton) {
-                repeatButton.disabled = false;
-            }
-            
-            // 發音時始終使用大寫字母，確保語音識別一致
-            speak(baseAnswer); 
-        }
-        
-        function handleAnswer(event) {
-            const selectedAnswer = event.target.dataset.answer;
-            const correctAnswer = currentQuestion.answer;
-            
-            document.querySelectorAll('.option-button').forEach(btn => btn.disabled = true);
-
-            if (repeatButton) {
-                repeatButton.disabled = true;
-            }
-
-            totalQuestions++;
-
-            // 獲取 CSS 變數值
-            const varr = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-
-            if (selectedAnswer === correctAnswer) {
-                score++;
-                feedback.textContent = '✅ 太棒了！妳答對了！';
-                feedback.className = 'correct';
-                speak('Good job');
-                event.target.style.backgroundColor = varr('--success-green');
-                event.target.style.color = varr('--text-light');
+            if (userInput === correctAnswer) {
+                message.textContent = `🎉 答對了！「${currentQuestion.word}」的注音是 ${correctAnswer}！`;
+                message.style.color = '#4CAF50'; // 綠色 (答對)
+                // 播放「答對了」的語音
+                speakWord('答對了！');
+                // 延遲一段時間後自動換下一題
+                setTimeout(nextQuestion, 2000); 
 
             } else {
-                feedback.textContent = `❌ 錯囉！正確答案是 ${correctAnswer}！`;
-                feedback.className = 'incorrect';
-                speak(`Oh no. The correct letter is ${correctAnswer}.`);
-                event.target.style.backgroundColor = varr('--error-red');
-                event.target.style.color = varr('--text-light');
+                // 如果是空字串，給出提示
+                if (userInput === '') {
+                    message.textContent = `🤔 請輸入注音符號，例如：ㄅㄚˋ`;
+                    message.style.color = '#FF9800'; // 橘色
+                } else {
+                    message.textContent = `❌ 錯囉！再試試看，或點「下一題」看答案。`;
+                    message.style.color = '#F44336'; // 紅色 (答錯)
+                }
                 
-                document.querySelectorAll('.option-button').forEach(btn => {
-                    if (btn.dataset.answer === correctAnswer) {
-                        btn.style.border = `5px dashed ${varr('--success-green')}`;
-                    }
-                });
+                // 播放「答錯了」的語音
+                speakWord('錯了，再試試看');
             }
-
-            scoreDisplay.textContent = `得分: ${score} / ${totalQuestions}`;
-
-            setTimeout(() => {
-                generateQuiz();
-            }, 1500); 
+        }
+        
+        /**
+         * 清空輸入框內容。 (對應「全部清除」功能)
+         */
+        function clearInput() {
+            zhuyinInput.value = '';
+            zhuyinInput.focus();
         }
 
+        // --- 事件監聽器 (Listener) ---
 
-        // ----------------------------------------------------
-        // 3. 初始化
-        // ----------------------------------------------------
+        // 1. 初始化語音
+        initSpeechSynthesizer();
+
+        // 2. 「再聽一次」按鈕
+        listenAgainBtn.addEventListener('click', () => {
+            if (currentQuestion) {
+                speakWord(currentQuestion.pronunciation);
+            }
+        });
+
+        // 3. 「全部清除」按鈕
+        clearInputBtn.addEventListener('click', clearInput);
+
+        // 4. 「送出答案」按鈕
+        checkAnswerBtn.addEventListener('click', checkAnswer);
         
-        window.onload = () => {
-            renderAlphabet();
-            generateQuiz();
-
-            // 綁定「切換大小寫」按鈕事件
-            if (caseToggleButton) {
-                caseToggleButton.onclick = toggleCase;
+        // 5. 「下一題」按鈕
+        nextWordBtn.addEventListener('click', nextQuestion);
+        
+        // 6. 輸入框支援 Enter 鍵送出
+        zhuyinInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                checkAnswer();
             }
-
-            // 綁定「再聽一次」按鈕事件
-            if (repeatButton) {
-                repeatButton.onclick = () => {
-                    // 發音時，將當前答案轉為大寫確保語音識別準確
-                    if (currentAnswerLetter) {
-                        speak(currentAnswerLetter.toUpperCase()); 
-                    }
-                };
-            }
-        };
-
+        });
+        
+        // 預載入第一道題目
+        nextQuestion();
     </script>
 </body>
 </html>
